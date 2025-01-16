@@ -1,171 +1,68 @@
-logo = r"""
-.------.            _     _            _    _            _    
-|A_  _ |.          | |   | |          | |  (_)          | |   
-|( \/ ).-----.     | |__ | | __ _  ___| | ___  __ _  ___| | __
-| \  /|K /\  |     | '_ \| |/ _` |/ __| |/ / |/ _` |/ __| |/ /
-|  \/ | /  \ |     | |_) | | (_| | (__|   <| | (_| | (__|   < 
-`-----| \  / |     |_.__/|_|\__,_|\___|_|\_\ |\__,_|\___|_|\_\\
-      |  \/ K|                            _/ |                
-      `------'                           |__/           
-"""
-
+from art import logo
 import random
-cards=[11,2,3,4,5,6,7,8,9,10,10,10,10]
 
-play=True
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
 
-want=input("do you want to play? y/n ")
-if want=='n':
-    play=False
+def deal_card():
+    return random.choice(cards)
 
-while play:
+def calculate_score(cards):
+    if sum(cards)==21 and len(cards)==2:
+        return 0
+    if 11 in cards and sum(cards)>21:
+        cards.remove(11)
+        cards.append(1)
+    return sum(cards)
+
+def compare(u_score,c_score):
+  if u_score==c_score:
+      return "draw"
+  elif c_score==0:
+      return "computer won"
+  elif u_score==0:
+      return "you won"
+  elif u_score>21:
+      return "you lose"
+  elif c_score>21:
+      return "you won"
+  elif u_score > c_score:
+      return "you win"
+  else:
+      return "you lose "
+
+def play():
     print(logo)
     user_cards=[]
-    dealer_cards=[]
-    user_sum=0
-    dealers_sum=0
-    go_on=True
-    dealer_cards.extend([random.choice(cards), random.choice(cards)])
-    user_cards.extend([random.choice(cards), random.choice(cards)])
-    user_sum = sum(user_cards)
-    dealers_sum=sum(dealer_cards)
-    if user_sum == 21 and dealers_sum == 21:
-     print("draw")
-     print(f"Your cards: {user_cards}, current score: {user_sum}")
-     print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-    elif user_sum==21:
-        print("you won")
-        print(f"Your cards: {user_cards}, current score: {user_sum}")
-        print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-        go_on = False
-    elif user_sum > 21:
-        go_on = False
-        print("you went over. you lose")
-        print(f"Your cards: {user_cards}, current score: {user_sum}")
-        print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-    elif dealers_sum==21:
-        print("you lost computer won")
-        print(f"Your cards: {user_cards}, current score: {user_sum}")
-        print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-        go_on = False
-    else:
-        print(f"Your cards: {user_cards}, current score: {user_sum}")
-        print(f"Computer's first card: {dealer_cards[0]}")
-        hit = input("Type 'y' to get another card, type 'n' to pass: ")
-        if hit == 'n':
-          go_on = False
-          while dealers_sum<17:
-                     dealer_cards.append(random.choice(cards))
-                     dealers_sum = sum(dealer_cards)
-          if user_sum<21 and dealers_sum>21:
-              print("you won")
-              print(f"Your cards: {user_cards}, current score: {user_sum}")
-              print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
+    computer_cards=[]
+    user_score=-1
+    computer_score=-1
+    game=True
 
-          if user_sum == 21 and dealers_sum == 21:
-                 print("draw")
-                 print(f"Your cards: {user_cards}, current score: {user_sum}")
-                 print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-          if user_sum > 21:
-                 print("you went over. you lose")
-                 print(f"Your cards: {user_cards}, current score: {user_sum}")
-                 print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-          if user_sum == 21:
-                 print("you won")
-                 print(f"Your cards: {user_cards}, current score: {user_sum}")
-                 print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
+    for i in range(2):
+     user_cards.append(deal_card())
+     computer_cards.append(deal_card())
 
-          if dealers_sum == 21:
-                 print("you lost computer won")
-                 print(f"Your cards: {user_cards}, current score: {user_sum}")
-                 print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-          if user_sum<21 and dealers_sum<21:
-              if user_sum<dealers_sum:
-                 print("you lost computer won")
-                 print(f"Your cards: {user_cards}, current score: {user_sum}")
-                 print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-
-              if dealers_sum<user_sum:
-                 print("you won")
-                 print(f"Your cards: {user_cards}, current score: {user_sum}")
-                 print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-
-
-
-
-
-    while go_on:
-     dealer_cards.append(random.choice(cards))
-     user_cards.append(random.choice(cards))
-     user_sum=sum(user_cards)
-     dealers_sum=sum(dealer_cards)
-     if user_sum==21 and dealers_sum==21:
-         print("draw")
-         print(f"Your cards: {user_cards}, current score: {user_sum}")
-         print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-     elif user_sum>21:
-         print("you went over. you lose")
-         print(f"Your cards: {user_cards}, current score: {user_sum}")
-         print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-         go_on=False
-
-     elif user_sum == 21:
-         print("you won")
-         print(f"Your cards: {user_cards}, current score: {user_sum}")
-         print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-         go_on=False
-     elif dealers_sum == 21:
-         print("you lost computer won")
-         print(f"Your cards: {user_cards}, current score: {user_sum}")
-         print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-         go_on = False
+    while game:
+     user_score=calculate_score(user_cards)
+     computer_score=calculate_score(computer_cards)
+     print(f"Your cards: {user_cards}, current score: {user_score}")
+     print(f"Computer's first card: {computer_cards[0]}")
+     if user_score==0 or computer_score==0 or user_score>21:
+        game=False
      else:
-         print(f"Your cards: {user_cards}, current score: {user_sum}")
-         print(f"Computer's first card: {dealer_cards[0]}")
-         hit=input("Type 'y' to get another card, type 'n' to pass: ")
-         if hit=='n':
-          go_on=False
-          if dealers_sum < 16:
-              while dealers_sum < 16:
-                  dealer_cards.append(random.choice(cards))
-                  dealers_sum = sum(dealer_cards)
-          user_sum = sum(user_cards)
-          if user_sum == 21 and dealers_sum == 21:
-              print("draw")
-              print(f"Your cards: {user_cards}, current score: {user_sum}")
-              print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-          elif user_sum > 21:
-              print("you went over. you lose")
-              print(f"Your cards: {user_cards}, current score: {user_sum}")
-              print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-          elif user_sum<21 and dealers_sum>21:
-              print("you won")
-              print(f"Your cards: {user_cards}, current score: {user_sum}")
-              print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
+        deal=input("want to deal another card? ")
+        if deal=='y':
+            user_cards.append(deal_card())
+        else:
+            game=False
+    while computer_score!=0 and computer_score<17:
+        computer_cards.append(deal_card())
+        computer_score=calculate_score(computer_cards)
+    print(f"Your final hand: {user_cards}, final score: {user_score}")
+    print(f"Computer's final hand: {computer_cards}, final score: {computer_score}")
+    print(compare(user_score, computer_score))
+
+while input("want to play?")=='y':
+    play()
 
 
-          elif user_sum == 21:
-              print("you won")
-              print(f"Your cards: {user_cards}, current score: {user_sum}")
-              print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-
-          elif dealers_sum == 21:
-              print("you lost computer won")
-              print(f"Your cards: {user_cards}, current score: {user_sum}")
-              print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-          elif user_sum < 21 and dealers_sum < 21:
-              if user_sum < dealers_sum:
-                  print("you lost computer won")
-                  print(f"Your cards: {user_cards}, current score: {user_sum}")
-                  print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-
-              if dealers_sum < user_sum:
-                  print("you won")
-                  print(f"Your cards: {user_cards}, current score: {user_sum}")
-                  print(f"computers cards: {dealer_cards}, current score: {dealers_sum}")
-
-    play_again=input("want to play again? ")
-    if play_again=='n':
-     play=False
-    if play_again == 'y':
-        print("\n")
